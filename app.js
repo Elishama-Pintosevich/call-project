@@ -2,6 +2,7 @@ require("dotenv").config()
 const http = require('http')
 const express = require("express")
 const app = express()
+const path = require("path");
 
 app.use(express.json())
 
@@ -15,6 +16,7 @@ const cors = require("cors")
 routesInit(app);
 app.use(cors())
 
+app.use(express.static(path.join(__dirname, "public")));
 
 function createCall(){
     client.calls
