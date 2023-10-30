@@ -7,7 +7,7 @@ router.get("/", async(req,res) => {
 })
 router.get("/incoming", async(req,res)=>{
     const twiml = new VoiceResponse();
-    twiml.say('hello elishama');
+    twiml.play("../voices/MyVoice.m3");
     res.writeHead(200, { 'Content-Type': 'text/xml' });
     res.end(twiml.toString());
     // res.end(twiml.toString());
