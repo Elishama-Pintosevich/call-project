@@ -10,9 +10,11 @@ const {routesInit} = require("./routes/configRoutes")
 const accountSid = process.env.ACCOUNT_SID;
 const authToken = process.env.TOKEN_SID;
 const client = require('twilio')(accountSid, authToken);
-
+const cors = require("cors")
 
 routesInit(app);
+app.use(cors())
+
 
 function createCall(){
     client.calls

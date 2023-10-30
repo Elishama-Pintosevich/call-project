@@ -15,7 +15,7 @@ router.get("/incoming", async(req,res)=>{
 
 })
 router.get("/test", async(req,res)=>{
-    res.json({msg:"test work!"})
+    res.json({msg:"test work2!"})
 })
 
 module.exports = router;
