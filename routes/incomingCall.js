@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const VoiceResponse = require('twilio').twiml.VoiceResponse;
-
-
+const urlencoded = require('body-parser').urlencoded;
+app.use(urlencoded({ extended: false }));
 router.get("/", async(req,res) => {
   res.json({msg:"incoming call work!"})
 })
