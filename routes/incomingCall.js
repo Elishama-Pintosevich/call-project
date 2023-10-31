@@ -50,7 +50,7 @@ router.post("/voice", async(req,res)=>{
   });
 
   gather.play("https://call-project.cyclic.app/Rev.mp3");
-  gather.say({language: 'he-IL',voice: 'Google.he-IL-Standard-B'},'למיזם חרבות של מעשים טובים הקש 1, לתרומה הקש 2');
+  gather.say({language: 'he-IL',voice: 'Google.he-IL-Standard-B'},'למיזם חרבות של מעשים טובים הקֶש 1, לתרומה הקֶש 2');
 
   twiml.redirect({
     method: 'POST'
@@ -66,18 +66,18 @@ router.post("/gather", async(req,res)=>{
   if (req.body.Digits) {
     switch (req.body.Digits) {
       case '1':
-        twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'הגעת למיזם חרבות של מעשים טובים.');
+        twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'הִגעת למיזם חרבות של מעשים טובים.');
 
           gather = twiml.gather({
           numDigits: 1,
           action:'https://call-project.cyclic.app/incomingCall/tora-magna',
           method: 'POST'
         })
-        gather.say({language: 'he-IL',voice: 'Google.he-IL-Standard-B'},'אנא בחר סדר גמרא. לסדר זרעים הקש 1, לסדר מועד הקש 2, לסדר נשים הקש 3, לסדר נזיקין הקש 4, לסדר קדשים הקש 5 ');
+        gather.say({language: 'he-IL',voice: 'Google.he-IL-Standard-B'},'אנא בחר סדר גמרא. לסדר זרעים הקֶש 1, לסדר מועד הקֶש 2, לסדר נשים הקֶש 3, לסדר נזיקין הקֶש 4, לסדר קָדשים הקֶש 5 ');
 
         break;
       case '2':
-        twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'הגעת למחלקת התרומות');
+        twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'הִגעת למחלקת התרומות');
         break;
       default:
         twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},"סליחה, המספר איננו מזוהה");
@@ -103,19 +103,19 @@ router.post("/tora-magna", async(req,res)=>{
   if (req.body.Digits){
     switch (req.body.Digits){
       case '1':
-        twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'הגעת לסדר זרעים');
+        twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'הִגעת לסדר זרעים');
         break
       case '2':
-        twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'הגעת לסדר מועד');
+        twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'הִגעת לסדר מועד');
         break
       case '3':
-        twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'הגעת לסדר נשים');
+        twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'הִגעת לסדר נשים');
         break
       case '4':
-        twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'הגעת לסדר נזיקין');
+        twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'הִגעת לסדר נזיקין');
         break
       case '5':
-        twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'הגעת לסדר קדשים');
+        twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'הִגעת לסדר קדשים');
         break
       default:
         twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},"סליחה, המספר איננו מזוהה");
