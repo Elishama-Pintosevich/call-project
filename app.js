@@ -5,7 +5,8 @@ const app = express()
 const path = require("path");
 
 app.use(express.json())
-
+const urlencoded = require('body-parser').urlencoded;
+app.use(urlencoded({ extended: false }));
 const {routesInit} = require("./routes/configRoutes")
 
 const accountSid = process.env.ACCOUNT_SID;
