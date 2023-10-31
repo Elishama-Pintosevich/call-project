@@ -8,11 +8,11 @@ router.get("/", async(req,res) => {
 
 router.post("/voice", async(req,res)=>{
     const twiml = new VoiceResponse();
-    
+    // twiml.play("https://call-project.cyclic.app/Rev.mp3");
 
     function gather() {
-      twiml.play("https://call-project.cyclic.app/Rev.mp3");
       const gatherNode = twiml.gather({ numDigits: 1 });
+      gatherNode.play("https://call-project.cyclic.app/Rev.mp3");
       gatherNode.say('For sales, press 1. For support, press 2.');
       twiml.redirect({
         method: 'POST'
