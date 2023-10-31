@@ -66,7 +66,15 @@ router.post("/gather", async(req,res)=>{
   if (req.body.Digits) {
     switch (req.body.Digits) {
       case '1':
-        twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'הגעת למיזם חרבות של מעשים טובים');
+        twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'הגעת למיזם חרבות של מעשים טובים.');
+
+          gather = twiml.gather({
+          numDigits: 1,
+          action:'https://call-project.cyclic.app/incomingCall/tora-magna',
+          method: 'POST'
+        })
+        gather.say({language: 'he-IL',voice: 'Google.he-IL-Standard-B'},'אנא בחר סדר גמרא. לסדר זרעים הקש 1, לסדר מועד הקש 2, לסדר נשים הקש 3, לסדר נזיקין הקש 4, לסדר קדשים הקש 5 ');
+
         break;
       case '2':
         twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'הגעת למחלקת התרומות');
@@ -87,6 +95,47 @@ router.post("/gather", async(req,res)=>{
 
   res.type('text/xml');
   res.send(twiml.toString());
+})
+
+router.post("/tora-magna", async(req,res)=>{
+  const twiml = new VoiceResponse();
+
+  if (req.body.Digits){
+    switch (req.body.Digits){
+      case '1':
+        twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'הגעת לסדר זרעים');
+        break
+      case '2':
+        twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'הגעת לסדר מועד');
+        break
+      case '3':
+        twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'הגעת לסדר נשים');
+        break
+      case '4':
+        twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'הגעת לסדר נזיקין');
+        break
+      case '5':
+        twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'הגעת לסדר קדשים');
+        break
+      default:
+        twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},"סליחה, המספר איננו מזוהה");
+        twiml.pause();
+        twiml.redirect({
+          method: 'POST'
+      }, 'https://call-project.cyclic.app/incomingCall/voice');
+        break;  
+    }
+  }
+  else{
+    twiml.redirect({
+      method: 'POST'
+  }, 'https://call-project.cyclic.app/incomingCall/voice');
+  }
+
+
+  res.type('text/xml');
+  res.send(twiml.toString());
+
 })
 
 
