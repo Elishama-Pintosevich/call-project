@@ -10,12 +10,32 @@ router.post("/voice", async(req,res)=>{
     const twiml = new VoiceResponse();
     twiml.play("https://call-project.cyclic.app/Rev.mp3");
 
-    const gather = twiml.gather({ numDigits: 1 });
-    gather.say('For sales, press 1. For support, press 2.');
+    function gather() {
+      const gatherNode = twiml.gather({ numDigits: 1 });
+      gatherNode.say('For sales, press 1. For support, press 2.');
+      twiml.redirect({
+        method: 'POST'
+    }, 'https://call-project.cyclic.app/incomingCall/voice');
+    }
 
-    twiml.redirect("/voice");
 
-    
+    if (req.body.Digits) {
+      switch (req.body.Digits) {
+        case '1':
+          twiml.say('You selected sales. Good for you!');
+          break;
+        case '2':
+          twiml.say('You need support. We will help!');
+          break;
+        default:
+          twiml.say("Sorry, I don't understand that choice.");
+          twiml.pause();
+          gather();
+          break;
+      }
+    } else {
+      gather();
+    }
     // res.writeHead(200, { 'Content-Type': 'text/xml' });
     // res.end(twiml.toString());
     // res.end(twiml.toString());
