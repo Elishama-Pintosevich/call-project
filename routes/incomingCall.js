@@ -50,7 +50,7 @@ router.post("/voice", async(req,res)=>{
   });
 
   gather.play("https://call-project.cyclic.app/Rev.mp3");
-  gather.say({language: 'he-IL'},'למיזם חרבות של מעשים טובים הקש 1, לתרומה הקש 2');
+  gather.say({language: 'he-IL',voice: 'Google.he-IL-Standard-B'},'למיזם חרבות של מעשים טובים הקש 1, לתרומה הקש 2');
 
   twiml.redirect({
     method: 'POST'
