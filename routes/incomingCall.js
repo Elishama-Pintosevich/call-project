@@ -21,8 +21,8 @@ router.post("/voice", async(req,res)=>{
     // res.end(twiml.toString());
     // res.end(twiml.toString());
     // res.json({msg:twiml.toString()})
-    response.type('text/xml');
-    response.send(twiml.toString());
+    res.type('text/xml');
+    res.send(twiml.toString());
 
 })
 router.get("/test", async(req,res)=>{
