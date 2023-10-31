@@ -66,13 +66,13 @@ router.post("/gather", async(req,res)=>{
   if (req.body.Digits) {
     switch (req.body.Digits) {
       case '1':
-        twiml.say({language: 'he-IL'},'הגעת למיזם חרבות של מעשים טובים');
+        twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'הגעת למיזם חרבות של מעשים טובים');
         break;
       case '2':
-        twiml.say({language: 'he-IL'},'הגעת למחלקת התרומות');
+        twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'הגעת למחלקת התרומות');
         break;
       default:
-        twiml.say({language: 'he-IL'},"סליחה, המספר איננו מזוהה");
+        twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},"סליחה, המספר איננו מזוהה");
         twiml.pause();
         twiml.redirect({
           method: 'POST'
