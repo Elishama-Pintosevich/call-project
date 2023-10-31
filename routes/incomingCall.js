@@ -14,13 +14,15 @@ router.get("/voice", async(req,res)=>{
     const gather = twiml.gather({ numDigits: 1 });
     gather.say('For sales, press 1. For support, press 2.');
 
-    twiml.redirect('https://call-project.cyclic.app/incomingCall/voice');
+    twiml.redirect("/voice");
 
     
-    res.writeHead(200, { 'Content-Type': 'text/xml' });
-    res.end(twiml.toString());
+    // res.writeHead(200, { 'Content-Type': 'text/xml' });
+    // res.end(twiml.toString());
     // res.end(twiml.toString());
     // res.json({msg:twiml.toString()})
+    response.type('text/xml');
+  response.send(twiml.toString());
 
 })
 router.get("/test", async(req,res)=>{
