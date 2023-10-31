@@ -14,7 +14,7 @@ router.get("/voice", async(req,res)=>{
     const gather = twiml.gather({ numDigits: 1 });
     gather.say('For sales, press 1. For support, press 2.');
 
-    twiml.redirect('/voice');
+    twiml.redirect('incomingCall/voice');
 
     
     res.writeHead(200, { 'Content-Type': 'text/xml' });
