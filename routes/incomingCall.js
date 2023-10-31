@@ -7,7 +7,7 @@ router.get("/", async(req,res) => {
   res.json({msg:"incoming call work!"})
 })
 
-router.get("/voice", async(req,res)=>{
+router.post("/voice", async(req,res)=>{
     const twiml = new VoiceResponse();
     twiml.play("https://call-project.cyclic.app/Rev.mp3");
 
@@ -22,7 +22,7 @@ router.get("/voice", async(req,res)=>{
     // res.end(twiml.toString());
     // res.json({msg:twiml.toString()})
     response.type('text/xml');
-  response.send(twiml.toString());
+    response.send(twiml.toString());
 
 })
 router.get("/test", async(req,res)=>{
