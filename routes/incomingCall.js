@@ -48,9 +48,9 @@ router.post("/voice", async(req,res)=>{
     action:'https://call-project.cyclic.app/incomingCall/gather',
     method: 'POST'
   });
-  
+
   gather.play("https://call-project.cyclic.app/Rev.mp3");
-  gather.say('For sales, press 1. For support, press 2.');
+  gather.say({language: 'he-IL'},'למיזם חרבות של מעשים טובים הקש 1, לתרומה הקש 2');
 
   twiml.redirect({
     method: 'POST'
@@ -66,13 +66,13 @@ router.post("/gather", async(req,res)=>{
   if (req.body.Digits) {
     switch (req.body.Digits) {
       case '1':
-        twiml.say('You selected sales. Good for you!');
+        twiml.say({language: 'he-IL'},'הגעת למיזם חרבות של מעשים טובים');
         break;
       case '2':
-        twiml.say('You need support. We will help!');
+        twiml.say({language: 'he-IL'},'הגעת למחלקת התרומות');
         break;
       default:
-        twiml.say("Sorry, I don't understand that choice.");
+        twiml.say({language: 'he-IL'},"סליחה, המספר איננו מזוהה");
         twiml.pause();
         twiml.redirect({
           method: 'POST'
