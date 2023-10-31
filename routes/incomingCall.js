@@ -1,13 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const VoiceResponse = require('twilio').twiml.VoiceResponse;
-const urlencoded = require('body-parser').urlencoded;
-app.use(urlencoded({ extended: false }));
+
 router.get("/", async(req,res) => {
   res.json({msg:"incoming call work!"})
 })
 
-router.get("/voice", async(req,res)=>{
+router.post("/voice", async(req,res)=>{
     const twiml = new VoiceResponse();
     twiml.play("https://call-project.cyclic.app/Rev.mp3");
 
