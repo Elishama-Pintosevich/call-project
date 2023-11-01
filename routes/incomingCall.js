@@ -210,6 +210,8 @@ router.post("/masechet/:id", async(req,res)=>{
   }, 'https://call-project.cyclic.app/incomingCall/voice');
   }
 
+  res.type('text/xml');
+  res.send(twiml.toString());
 })
 
 
