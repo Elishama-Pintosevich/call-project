@@ -110,6 +110,7 @@ router.post("/tora-magna", async(req,res)=>{
       action:`https://call-project.cyclic.app/incomingCall/seder/${num-1}`,
       method: 'POST'
     })
+    gather.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'אנא המתן כמה רגעים')
     masechet[num-1].forEach((ele, i)=>{
       gather.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'}, `למסכת ${ele}`);
       gather.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'}, `הקֶש ${i+1}`);
@@ -160,11 +161,11 @@ router.post("/tora-magna", async(req,res)=>{
 router.post("/seder/:id", async(req,res)=>{
   const twiml = new VoiceResponse();
 
-  const masechet = [['ברכות'],['שבת','עירובין','פסחים','שקלים','יומא','סוכה','ביצה','ראש השנה','תענית','מגילה','מועד קטן','חגיגה'],['יבמות','כתובות','נדרים','נזיר','סוטה','גיטין','קידושין'],
+  const masechet = [['ברכות'],['שבת','עירובין','פסחים','שקלים','יומא','סוכה','ביצה','ראש השנה','תענית','מגילה','מועד קטן','חגיגה'],['יבמות','כתובות','נדרים','נזיר','סוטַה','גיטין','קידושין'],
   ['בבא קמא','בבא מציעא','בבא בתרא','סנהדרין','מכות','שבועות','עבודה זרה','הוריות'],['זבחים','מנחות','חולין','בכורות','ערכין','תמורה','כריתות','מעילה','נידה']]
    
   if(req.body.Digits){
-    const item = masechet[req.params.id][req.body.Digits]
+    const item = masechet[req.params.id][req.body.Digits-1]
     twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},` נבחרה מסכת ${item}`)
   }
   else{
