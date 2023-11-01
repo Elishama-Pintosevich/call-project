@@ -50,7 +50,7 @@ router.post("/voice", async(req,res)=>{
   });
 
   // gather.play("https://call-project.cyclic.app/Rev.mp3");
-  gather.say({language: 'he-IL',voice: 'Google.he-IL-Standard-B'},'שלום, הִגעתם למערכת הקולית של ללימוד השס העולמי')
+  gather.say({language: 'he-IL',voice: 'Google.he-IL-Standard-B'},'שלום, הִגעתם למערכת הקולית של לימוד השַס העולמי')
   gather.say({language: 'he-IL',voice: 'Google.he-IL-Standard-B'},'למיזם חרבות של מעשים טובים הקֶש 1, לתרומה הקֶש 2');
 
   twiml.redirect({
