@@ -168,7 +168,8 @@ router.post("/seder", async(req,res)=>{
       method: 'POST'
   }, 'https://call-project.cyclic.app/incomingCall/voice');
   }
-
+  res.type('text/xml');
+  res.send(twiml.toString());
 })
 
 
