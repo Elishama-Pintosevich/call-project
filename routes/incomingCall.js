@@ -105,12 +105,12 @@ router.post("/tora-magna", async(req,res)=>{
   ['בבא קמא','בבא מציעא','בבא בתרא','סנהדרין','מכות','שבועות','עבודה זרה','הוריות'],['זבחים','מנחות','חולין','בכורות','ערכין','תמורה','כריתות','מעילה','נידה']]
 
   function gether(num){
+      twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'אנא המתן כמה רגעים')
       gather = twiml.gather({
       numDigits: 1,
       action:`https://call-project.cyclic.app/incomingCall/seder/${num-1}`,
       method: 'POST'
     })
-    gather.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'אנא המתן כמה רגעים')
     masechet[num-1].forEach((ele, i)=>{
       gather.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'}, `למסכת ${ele}`);
       gather.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'}, `הקֶש ${i+1}`);
