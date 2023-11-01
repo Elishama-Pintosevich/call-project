@@ -50,7 +50,7 @@ router.post("/voice", async(req,res)=>{
   });
 
   // gather.play("https://call-project.cyclic.app/Rev.mp3");
-  gather.say({language: 'he-IL',voice: 'Google.he-IL-Standard-B'},'שלום, הִגעתם למערכת הקולית של לימוד השַס העולמי')
+  gather.say({language: 'he-IL',voice: 'Google.he-IL-Standard-B'},'שלום, הִגעתם למערכת הקולית של לימוד השַׁס העולמי')
   gather.say({language: 'he-IL',voice: 'Google.he-IL-Standard-B'},'למיזם חרבות של מעשים טובים הקֶש 1, לתרומה הקֶש 2');
 
   twiml.redirect({
@@ -107,7 +107,7 @@ router.post("/tora-magna", async(req,res)=>{
   function gether(num){
       gather = twiml.gather({
       numDigits: 1,
-      action:'https://call-project.cyclic.app/incomingCall/seder',
+      action:`https://call-project.cyclic.app/incomingCall/seder/${num-1}`,
       method: 'POST'
     })
     masechet[num-1].forEach((ele, i)=>{
@@ -157,11 +157,15 @@ router.post("/tora-magna", async(req,res)=>{
 
 })
 // בעצם מה שצריך לעשות זה אחרי שבוחרים איזה סדר צריך לבחור איזו מסכת אחרי שבן אדם נניח לחץ על מועד אז צריך להיכנס לגטר של 12 מסכתות לפחות איך אפשר לעשות את זה דינמי לעשות מערך ל מערכים ולקחת לפי מיקום ולעשות דיבור לולאה של דיבור עם מיקום ואם בן אדם לוחץ מספר יותר גדול מהאורך אז זה מחזיר אותו חזרה אם לא זה עושה לו רידיירט לכתובת לפי ההאאיד שהוא בחר
-router.post("/seder", async(req,res)=>{
+router.post("/seder/:id", async(req,res)=>{
   const twiml = new VoiceResponse();
+
+  const masechet = [['ברכות'],['שבת','עירובין','פסחים','שקלים','יומא','סוכה','ביצה','ראש השנה','תענית','מגילה','מועד קטן','חגיגה'],['יבמות','כתובות','נדרים','נזיר','סוטה','גיטין','קידושין'],
+  ['בבא קמא','בבא מציעא','בבא בתרא','סנהדרין','מכות','שבועות','עבודה זרה','הוריות'],['זבחים','מנחות','חולין','בכורות','ערכין','תמורה','כריתות','מעילה','נידה']]
    
   if(req.body.Digits){
-    twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},"תודה ולהתראות")
+    const item = masechet[req.params.id][req.body.Digits]
+    twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},` נבחרה מסכת ${item}`)
   }
   else{
     twiml.redirect({
