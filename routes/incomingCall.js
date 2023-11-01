@@ -160,13 +160,33 @@ router.post("/tora-magna", async(req,res)=>{
 // בעצם מה שצריך לעשות זה אחרי שבוחרים איזה סדר צריך לבחור איזו מסכת אחרי שבן אדם נניח לחץ על מועד אז צריך להיכנס לגטר של 12 מסכתות לפחות איך אפשר לעשות את זה דינמי לעשות מערך ל מערכים ולקחת לפי מיקום ולעשות דיבור לולאה של דיבור עם מיקום ואם בן אדם לוחץ מספר יותר גדול מהאורך אז זה מחזיר אותו חזרה אם לא זה עושה לו רידיירט לכתובת לפי ההאאיד שהוא בחר
 router.post("/seder/:id", async(req,res)=>{
   const twiml = new VoiceResponse();
-
+// https://good-action.cyclic.app/tractates/single
+// https://good-action.cyclic.app/tractates/setPages
   const masechet = [['ברכות'],['שבת','עירובין','פסחים','שקלים','יומא','סוכה','ביצה','ראש השנה','תענית','מגילה','מועד קטן','חגיגה'],['יבמות','כתובות','נדרים','נזיר','סוטַה','גיטין','קידושין'],
   ['בבא קמא','בבא מציעא','בבא בתרא','סנהדרין','מכות','שבועות','עבודה זרה','הוריות'],['זבחים','מנחות','חולין','בכורות','ערכין','תמורה','כריתות','מעילה','נידה']]
+  const id = [["65291f2664f26cd4f42bf2bc"],["65291fd664f26cd4f42bf2c2","6529202764f26cd4f42bf2c4","6529207764f26cd4f42bf2c8","652921b064f26cd4f42bf2ca","6529220464f26cd4f42bf2cc","6529224364f26cd4f42bf2ce",
+  "652922ba64f26cd4f42bf2d0","652922f764f26cd4f42bf2d2","6529235164f26cd4f42bf2d4","652923cb64f26cd4f42bf2d6","6529241064f26cd4f42bf2d8","6529244364f26cd4f42bf2da"],
+  ["6529248864f26cd4f42bf2dc","652924c164f26cd4f42bf2de","652924fb64f26cd4f42bf2e0","6529252564f26cd4f42bf2e2","652927db64f26cd4f42bf2e4","6529281d64f26cd4f42bf2e6",
+  "6529284b64f26cd4f42bf2e8"],["652928b164f26cd4f42bf2ea","65292a0564f26cd4f42bf2ec","65292a8664f26cd4f42bf2f0","65292b0264f26cd4f42bf2f2","65292b9f64f26cd4f42bf2f4",
+  "65292bd864f26cd4f42bf2f6","65292c8864f26cd4f42bf2f8","65292cba64f26cd4f42bf2fa"],["65292cf364f26cd4f42bf2fc","65292d1564f26cd4f42bf2fe","65292d3c64f26cd4f42bf300",
+  "65292d5964f26cd4f42bf302","65292dc064f26cd4f42bf306","65292dec64f26cd4f42bf308","65292e2764f26cd4f42bf30a","65292e7364f26cd4f42bf30c","65292e9b64f26cd4f42bf30e"]]
    
-  if(req.body.Digits){
+  function gether(){
+    twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'אנא הַמְתֶן כמה רגעים')
+    let idMasechet = id[req.params.id][req.body.Digits-1]
+      gather = twiml.gather({
+      numDigits: 1,
+      action:`https://call-project.cyclic.app/incomingCall/masechet/${idMasechet}`,
+      method: 'POST'
+    })
+    gather.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'}, `אנא בחר דף באמצעות מספר ואחריו הקש #. לדוגמה לדף בט הקש מספר 2 ואחריו #.`);
+
+  }
+
+  if(req.body.Digits && req.body.Digits <= masechet[req.params.id].length){
     const item = masechet[req.params.id][req.body.Digits-1]
     twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},` נבחרה מסכת ${item}`)
+    gether()
   }
   else{
     twiml.redirect({
@@ -175,6 +195,21 @@ router.post("/seder/:id", async(req,res)=>{
   }
   res.type('text/xml');
   res.send(twiml.toString());
+})
+// מה שבעצם צריך לעשות אחרי שנבחרה המסכת ואנחנו יודעים את האיידי שלה זה להעביר לראוט הבא עם בקשה של הקש דף ואחכ סולמית אז מה שבעצם יקרה יעבור לראוט הבא האיידי של המסכת ביואראל ומספר הדף ואחרי שיש לנו את זה תהיה בקשה לשרת בסינגל ולבדוק את כמות הדפים ואם המספר תואם את מה שקיים אם כן צריך לבדוק את המערך במיקום של המספר של המשמש אם זה תפוס אם כן אז להעביר אותו להתחלה אם לא תפוס אז לעדכן את השרת ולהגיד תודה רבה על הבחירה
+router.post("/masechet/:id", async(req,res)=>{
+  const twiml = new VoiceResponse();
+  let id = req.params.id
+
+  if(req.body.Digits){
+    twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},`תודה ולהתראות`)
+  }
+  else{
+    twiml.redirect({
+      method: 'POST'
+  }, 'https://call-project.cyclic.app/incomingCall/voice');
+  }
+
 })
 
 
