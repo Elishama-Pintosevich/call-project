@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const VoiceResponse = require('twilio').twiml.VoiceResponse;
+const axios = require('axios');
+const { twiml } = require("twilio");
 
 router.get("/", async(req,res) => {
   res.json({msg:"incoming call work!"})
@@ -176,7 +178,7 @@ router.post("/seder/:id", async(req,res)=>{
       gather = twiml.gather({
       finishOnKey: "#",
       action:`https://call-project.cyclic.app/incomingCall/masechet/${idMasechet}`,
-      method: 'POST'
+      method: 'GET'
     })
     gather.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'}, `אנא בחר דף באמצעות מספר ואחריו הקש סולמית. לדוגמה לדף בט הקש 2 ואחריו הקש סולמית.`);
 
@@ -197,33 +199,84 @@ router.post("/seder/:id", async(req,res)=>{
 })
 // מה שבעצם צריך לעשות אחרי שנבחרה המסכת ואנחנו יודעים את האיידי שלה זה להעביר לראוט הבא עם בקשה של הקש דף ואחכ סולמית אז מה שבעצם יקרה יעבור לראוט הבא האיידי של המסכת ביואראל ומספר הדף ואחרי שיש לנו את זה תהיה בקשה לשרת בסינגל ולבדוק את כמות הדפים ואם המספר תואם את מה שקיים אם כן צריך לבדוק את המערך במיקום של המספר של המשמש אם זה תפוס אם כן אז להעביר אותו להתחלה אם לא תפוס אז לעדכן את השרת ולהגיד תודה רבה על הבחירה
 
-const doApi = async(_id)=>{
-let urlGet = `https://good-action.cyclic.app/tractates/single/${_id}`
-let urlEdit = `https://good-action.cyclic.app/tractates/setPages/${_id}`
+const doApi = (_id)=>{
+
+
 
 try {
-  const {data} = await axios.get(urlGet);
-} catch (error) {
+  const {data} = axios.get(urlGet);
+  // res.json(data)
+  return data[0]
+  // console.log(data[0]);
   
+} catch (error) {
+  console.log(error);
 }
 
 }
 
-router.post("/masechet/:id", async(req,res)=>{
-  const twiml = new VoiceResponse();
+//global storage
+let data = 0
+//
+router.get("/masechet/:id", async(req,res)=>{
   let id = req.params.id
+  let urlGet = `https://good-action.cyclic.app/tractates/single/${id}`
+  const twiml = new VoiceResponse();
 
+  function gether(){
+      gather = twiml.gather({
+      numDigits: 1,
+      action:`https://call-project.cyclic.app/incomingCall/amud/${req.body.Digits}`,
+      method: 'GET'
+    })
+    gather.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'}, `אנא בחר עמוד. לעמוד אלף הקש 1, לעמוד בט הקש 2.`);
 
-
-  if(req.body.Digits){
-    twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},`נבחר דף ${req.body.Digits}`)
+  }
+  
+  data = await axios.get(urlGet).then((response) => response.data);
+  digit = req.body.Digits || 0
+  if(digit && digit <= data[0].count/2+1 && digit >= 2){
+    twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},` נבחר דף ${req.body.Digits}`)
+    gether()
   }
   else{
     twiml.redirect({
       method: 'POST'
   }, 'https://call-project.cyclic.app/incomingCall/voice');
   }
-
+  res.type('text/xml');
+  res.send(twiml.toString());
+})
+// בעצם מה שצריך לעשות עכשיו זה לשאול את המשתמש איזה עמוד הוא בוחר עמוד אלף או עמוד ב ואם הוא נניח מקיש 2 אז המערכת תבדוק בגלובל סטורג האם המערך במיקום ההוא תפוס או לא 
+router.get("/amud/:id", async(req,res)=>{
+  const twiml = new VoiceResponse();
+  let urlEdit = `https://good-action.cyclic.app/tractates/setPages/${data[0]._id}`
+  const id = req.params.id
+  if(req.body.Digits && req.body.Digits<3){
+    switch (req.body.Digits){
+      case '1':
+        if(data[0].pages[(id-2)*2]==1){
+          twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},`העמוד תפוס, נסה עמוד או דף אחר`)
+        }
+        else{
+          twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},`מעולה, הדף נתפס בהצלחה`)
+        }
+        break
+      case '2':
+          if(data[0].pages[(id-2)*2+1]==1){
+          twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},`העמוד תפוס, נסה עמוד או דף אחר`)
+        }
+        else{
+          twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},`מעולה, הדף נתפס בהצלחה`)
+        }
+        break
+    }
+  }
+  else{
+    twiml.redirect({
+      method: 'POST'
+  }, 'https://call-project.cyclic.app/incomingCall/voice');
+  }
   res.type('text/xml');
   res.send(twiml.toString());
 })
