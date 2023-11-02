@@ -181,7 +181,7 @@ router.post("/seder/:id", async(req,res)=>{
       action:`https://call-project.cyclic.app/incomingCall/masechet/${idMasechet}`,
       method: 'POST'
     })
-    gather.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'}, `אנא בחר דף באמצעות מספר ואחריו הקש סולמית. לדוגמה לדף בט הקש 2 ואחריו הקש סולמית.`);
+    gather.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'}, `אנא בחר דף באמצעות מספר ואחריו הַקֶש סולמית. לדוגמה לדף בט הַקֶש 2 ואחריו הַקֶש סולמית.`);
 
   }
 
