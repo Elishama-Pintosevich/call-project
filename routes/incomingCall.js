@@ -172,14 +172,13 @@ router.post("/seder/:id", async(req,res)=>{
   "65292d5964f26cd4f42bf302","65292dc064f26cd4f42bf306","65292dec64f26cd4f42bf308","65292e2764f26cd4f42bf30a","65292e7364f26cd4f42bf30c","65292e9b64f26cd4f42bf30e"]]
    
   function gether(){
-    twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'אנא הַמְתֶן כמה רגעים')
     let idMasechet = id[req.params.id][req.body.Digits-1]
       gather = twiml.gather({
-      numDigits: 1,
+      finishOnKey: "#",
       action:`https://call-project.cyclic.app/incomingCall/masechet/${idMasechet}`,
       method: 'POST'
     })
-    gather.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'}, `אנא בחר דף באמצעות מספר ואחריו הקש #. לדוגמה לדף בט הקש מספר 2 ואחריו #.`);
+    gather.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'}, `אנא בחר דף באמצעות מספר ואחריו הקש סולמית. לדוגמה לדף בט הקש 2 ואחריו הקש סולמית.`);
 
   }
 
@@ -197,12 +196,27 @@ router.post("/seder/:id", async(req,res)=>{
   res.send(twiml.toString());
 })
 // מה שבעצם צריך לעשות אחרי שנבחרה המסכת ואנחנו יודעים את האיידי שלה זה להעביר לראוט הבא עם בקשה של הקש דף ואחכ סולמית אז מה שבעצם יקרה יעבור לראוט הבא האיידי של המסכת ביואראל ומספר הדף ואחרי שיש לנו את זה תהיה בקשה לשרת בסינגל ולבדוק את כמות הדפים ואם המספר תואם את מה שקיים אם כן צריך לבדוק את המערך במיקום של המספר של המשמש אם זה תפוס אם כן אז להעביר אותו להתחלה אם לא תפוס אז לעדכן את השרת ולהגיד תודה רבה על הבחירה
+
+const doApi = async(_id)=>{
+let urlGet = `https://good-action.cyclic.app/tractates/single/${_id}`
+let urlEdit = `https://good-action.cyclic.app/tractates/setPages/${_id}`
+
+try {
+  const {data} = await axios.get(urlGet);
+} catch (error) {
+  
+}
+
+}
+
 router.post("/masechet/:id", async(req,res)=>{
   const twiml = new VoiceResponse();
   let id = req.params.id
 
+
+
   if(req.body.Digits){
-    twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},`תודה ולהתראות`)
+    twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},`נבחר דף ${req.body.Digits}`)
   }
   else{
     twiml.redirect({
