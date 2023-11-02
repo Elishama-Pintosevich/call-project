@@ -110,7 +110,7 @@ router.post("/tora-magna", async(req,res)=>{
   function gether(num){
       twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'אנא הַמְתֶן כמה רגעים')
       gather = twiml.gather({
-      numDigits: 1,
+      timeout: 3,
       action:`https://call-project.cyclic.app/incomingCall/seder/${num-1}`,
       method: 'POST'
     })
@@ -218,7 +218,7 @@ router.post("/masechet/:id", async(req,res)=>{
       action:`https://call-project.cyclic.app/incomingCall/amud/${req.body.Digits}`,
       method: 'POST'
     })
-    gather.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'}, `אנא בחר עמוד. לעמוד אָלֶף הקש 1, לעמוד בֶט הקש 2.`);
+    gather.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'}, `אנא בחר עמוד. לעמוד אָלֶף הַקֶש 1, לעמוד בֶט הַקֶש 2.`);
 
   }
   
