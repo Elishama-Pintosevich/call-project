@@ -2,7 +2,8 @@ const express = require("express");
 const router = express.Router();
 const VoiceResponse = require('twilio').twiml.VoiceResponse;
 const axios = require('axios');
-const { twiml } = require("twilio");
+
+
 
 router.get("/", async(req,res) => {
   res.json({msg:"incoming call work!"})
@@ -103,7 +104,7 @@ router.post("/gather", async(req,res)=>{
 router.post("/tora-magna", async(req,res)=>{
   const twiml = new VoiceResponse();
 
-  const masechet = [['ברכות'],['שבת','עירובין','פסחים','שקלים','יומא','סוכה','ביצה','ראש השנה','תענית','מגילה','מועד קטן','חגיגה'],['יבמות','כתובות','נדרים','נזיר','סוטה','גיטין','קידושין'],
+  const masechet = [['ברכות'],['שבת','עירובין','פסחים','שקלים','יומא','סוכה','ביצה','ראש השנה','תענית','מגילה','מועד קטן','חגיגה'],['יבמות','כתובות','נדרים','נזיר','סוטַה','גיטין','קידושין'],
   ['בבא קמא','בבא מציעא','בבא בתרא','סנהדרין','מכות','שבועות','עבודה זרה','הוריות'],['זבחים','מנחות','חולין','בכורות','ערכין','תמורה','כריתות','מעילה','נידה']]
 
   function gether(num){
@@ -115,7 +116,7 @@ router.post("/tora-magna", async(req,res)=>{
     })
     masechet[num-1].forEach((ele, i)=>{
       gather.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'}, `למסכת ${ele}`);
-      gather.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'}, `הקֶש ${i+1}`);
+      gather.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'}, `הַקֶש ${i+1}`);
     })
   }
 
@@ -190,6 +191,8 @@ router.post("/seder/:id", async(req,res)=>{
     gether()
   }
   else{
+    twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},"סליחה, המספר איננו מזוהה");
+    twiml.pause();
     twiml.redirect({
       method: 'POST'
   }, 'https://call-project.cyclic.app/incomingCall/voice');
@@ -215,7 +218,7 @@ router.post("/masechet/:id", async(req,res)=>{
       action:`https://call-project.cyclic.app/incomingCall/amud/${req.body.Digits}`,
       method: 'POST'
     })
-    gather.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'}, `אנא בחר עמוד. לעמוד אלף הקש 1, לעמוד בט הקש 2.`);
+    gather.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'}, `אנא בחר עמוד. לעמוד אָלֶף הקש 1, לעמוד בֶט הקש 2.`);
 
   }
   
@@ -226,6 +229,8 @@ router.post("/masechet/:id", async(req,res)=>{
     gether()
   }
   else{
+    twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},"סליחה, המספר איננו מזוהה");
+    twiml.pause();
     twiml.redirect({
       method: 'POST'
   }, 'https://call-project.cyclic.app/incomingCall/voice');
@@ -238,27 +243,36 @@ router.post("/amud/:id", async(req,res)=>{
   const twiml = new VoiceResponse();
   let urlEdit = `https://good-action.cyclic.app/tractates/setPages/${data[0]._id}`
   const id = req.params.id
+  
   if(req.body.Digits && req.body.Digits<3){
     switch (req.body.Digits){
       case '1':
         if(data[0].pages[(id-2)*2]==1){
-          twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},`העמוד תפוס, נסה עמוד או דף אחר`)
+          twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},`העמוד תפוס, נסה עמוד או דף אחר. תודה`)
         }
         else{
-          twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},`מעולה, הדף נתפס בהצלחה`)
+          twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},`מעולה, הדף נתפס בהצלחה. תודה`)
+          data[0].pages[(id-2)*2]=1
+          const data2 = await axios.put(urlEdit,{name:data[0].name, count:data[0].count, pages:data[0].pages}).then((response) => response);
+          console.log(data2);
         }
         break
       case '2':
           if(data[0].pages[(id-2)*2+1]==1){
-          twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},`העמוד תפוס, נסה עמוד או דף אחר`)
+          twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},`העמוד תפוס, נסה עמוד או דף אחר. תודה`)
         }
         else{
-          twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},`מעולה, הדף נתפס בהצלחה`)
+          twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},`מעולה, הדף נתפס בהצלחה. תודה`)
+          data[0].pages[(id-2)*2+1]=1
+          const data2 = await axios.put(urlEdit,{name:data[0].name, count:data[0].count, pages:data[0].pages}).then((response) => response);
+          console.log(data2);
         }
         break
     }
   }
   else{
+    twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},"סליחה, המספר איננו מזוהה");
+    twiml.pause();
     twiml.redirect({
       method: 'POST'
   }, 'https://call-project.cyclic.app/incomingCall/voice');
