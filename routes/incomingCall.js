@@ -178,7 +178,7 @@ router.post("/seder/:id", async(req,res)=>{
       gather = twiml.gather({
       finishOnKey: "#",
       action:`https://call-project.cyclic.app/incomingCall/masechet/${idMasechet}`,
-      method: 'GET'
+      method: 'POST'
     })
     gather.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'}, `אנא בחר דף באמצעות מספר ואחריו הקש סולמית. לדוגמה לדף בט הקש 2 ואחריו הקש סולמית.`);
 
@@ -199,26 +199,12 @@ router.post("/seder/:id", async(req,res)=>{
 })
 // מה שבעצם צריך לעשות אחרי שנבחרה המסכת ואנחנו יודעים את האיידי שלה זה להעביר לראוט הבא עם בקשה של הקש דף ואחכ סולמית אז מה שבעצם יקרה יעבור לראוט הבא האיידי של המסכת ביואראל ומספר הדף ואחרי שיש לנו את זה תהיה בקשה לשרת בסינגל ולבדוק את כמות הדפים ואם המספר תואם את מה שקיים אם כן צריך לבדוק את המערך במיקום של המספר של המשמש אם זה תפוס אם כן אז להעביר אותו להתחלה אם לא תפוס אז לעדכן את השרת ולהגיד תודה רבה על הבחירה
 
-const doApi = (_id)=>{
 
-
-
-try {
-  const {data} = axios.get(urlGet);
-  // res.json(data)
-  return data[0]
-  // console.log(data[0]);
-  
-} catch (error) {
-  console.log(error);
-}
-
-}
 
 //global storage
 let data = 0
 //
-router.get("/masechet/:id", async(req,res)=>{
+router.post("/masechet/:id", async(req,res)=>{
   let id = req.params.id
   let urlGet = `https://good-action.cyclic.app/tractates/single/${id}`
   const twiml = new VoiceResponse();
@@ -227,7 +213,7 @@ router.get("/masechet/:id", async(req,res)=>{
       gather = twiml.gather({
       numDigits: 1,
       action:`https://call-project.cyclic.app/incomingCall/amud/${req.body.Digits}`,
-      method: 'GET'
+      method: 'POST'
     })
     gather.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'}, `אנא בחר עמוד. לעמוד אלף הקש 1, לעמוד בט הקש 2.`);
 
@@ -248,7 +234,7 @@ router.get("/masechet/:id", async(req,res)=>{
   res.send(twiml.toString());
 })
 // בעצם מה שצריך לעשות עכשיו זה לשאול את המשתמש איזה עמוד הוא בוחר עמוד אלף או עמוד ב ואם הוא נניח מקיש 2 אז המערכת תבדוק בגלובל סטורג האם המערך במיקום ההוא תפוס או לא 
-router.get("/amud/:id", async(req,res)=>{
+router.post("/amud/:id", async(req,res)=>{
   const twiml = new VoiceResponse();
   let urlEdit = `https://good-action.cyclic.app/tractates/setPages/${data[0]._id}`
   const id = req.params.id
