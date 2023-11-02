@@ -252,7 +252,7 @@ router.post("/amud/:id", async(req,res)=>{
         }
         else{
           data[0].pages[(id-2)*2]=1
-          const data2 = await axios.put(urlEdit,{name:data[0].name, count:data[0].count, pages:data[0].pages}).then((response) => response);
+          const data2 = await axios.put(urlEdit,{name:data[0].name, count:data[0].count, pages:data[0].pages, amud:data[0].amud}).then((response) => response);
           console.log(data2);
           twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},`מעולה, הדף נתפס בהצלחה. תודה`)
         }
@@ -263,7 +263,7 @@ router.post("/amud/:id", async(req,res)=>{
         }
         else{
           data[0].pages[(id-2)*2+1]=1
-          const data2 = await axios.put(urlEdit,{name:data[0].name, count:data[0].count, pages:data[0].pages}).then((response) => response);
+          const data2 = await axios.put(urlEdit,{name:data[0].name, count:data[0].count, pages:data[0].pages, amud:data[0].amud}).then((response) => response);
           console.log(data2);
           twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},`מעולה, הדף נתפס בהצלחה. תודה`)
         }
