@@ -235,7 +235,7 @@ router.post("/masechet/:id", async(req,res)=>{
   if(digit == 1){
     twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'אנא הַמְתֶן כמה רגעים')
     for (let index = 0; index < data[0].pages.length; index++) {
-      const ele = array[index];
+      const ele = data[0].pages[index];
       if(ele == 0){
         data[0].pages[index]=1
         const data2 = await axios.put(urlEdit,{name:data[0].name, count:data[0].count, pages:data[0].pages, amud:data[0].amud}).then((response) => response);
