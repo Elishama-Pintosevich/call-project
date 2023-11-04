@@ -70,7 +70,7 @@ router.post("/gather", async(req,res)=>{
   if (req.body.Digits) {
     switch (req.body.Digits) {
       case '1':
-        twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'הִגעת לפרויקט לימוד השַׁס העולמי, בפרויקט זה העמוד שהִנך בוחר משויך אליך ונדרש ללומדו כל יום מחדש, כך תהיה שותף בכל יום ויום בסיום השַׁס העולמי');
+        twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'הִגעת לפרויקט לימוד השַׁס העולמי, בפרויקט זה העמוד שהִנךַ בוחר משויך אליך ונדרש ללומדו כל יום מחדש, כך תהיה שותף בכל יום ויום בסיום השַׁס העולמי');
 
           gather = twiml.gather({
           numDigits: 1,
