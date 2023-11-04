@@ -245,7 +245,7 @@ router.post("/masechet/:id", async(req,res)=>{
         console.log(data2);
         let page = Math.floor(index / 2) +2
         let amud = page < (index / 2 + 2) ? 2 : 1
-        twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},`מעולה, דף ${page},עמוד ${amud},נתפס בהצלחה. תודה`) 
+        twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},`מעולֶה, דף ${page},עמוד ${amud},נתפס בהצלחה. תודה`) 
         twiml.hangup()
         break
       } 
@@ -291,7 +291,7 @@ router.post("/amud/:id", async(req,res)=>{
           data[0].pages[(id-2)*2]=1
           const data2 = await axios.put(urlEdit,{name:data[0].name, count:data[0].count, pages:data[0].pages, amud:data[0].amud}).then((response) => response);
           console.log(data2);
-          twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},`מעולה, העמוד נתפס בהצלחה. תודה`)
+          twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},`מעולֶה, העמוד נתפס בהצלחה. תודה`)
         }
         break
       case '2':
@@ -303,7 +303,7 @@ router.post("/amud/:id", async(req,res)=>{
           data[0].pages[(id-2)*2+1]=1
           const data2 = await axios.put(urlEdit,{name:data[0].name, count:data[0].count, pages:data[0].pages, amud:data[0].amud}).then((response) => response);
           console.log(data2);
-          twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},`מעולה, העמוד נתפס בהצלחה. תודה`)
+          twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},`מעולֶה, העמוד נתפס בהצלחה. תודה`)
         }
         break
     }
