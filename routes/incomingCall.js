@@ -243,14 +243,12 @@ router.post("/masechet/:id", async(req,res)=>{
         let page = Math.floor(data[0].count / 2 + 2) 
         let amud = page < (data[0].count / 2 + 2) ? 2 : 1
         twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},`מעולה, דף ${page},עמוד ${amud},נתפס בהצלחה. תודה`) 
+        twiml.hangup()
         break
-      }
-      else{
-        twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},`המסכת תפוסה, נסה מסכת אחרת. תודה`)
-        redirect()
-        break
-      }
+      } 
     }
+    twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},`המסכת תפוסה, נסה מסכת אחרת. תודה`)
+    redirect()
     
   }
   else if(digit && digit <= data[0].count/2+1 && digit >= 2){
