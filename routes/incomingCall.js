@@ -81,7 +81,8 @@ router.post("/gather", async(req,res)=>{
 
         break;
       case '2':
-        twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'הִגעת למחלקת התרומות, ליצירת קשר אנא חייג 0548543491, תודה');
+        twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'הִגעת למחלקת התרומות');
+        twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B', loop:3},'.ליצירת קשר אנא חייג למספר 0 5 4 8 5 4 3 4 9 1, תודה')
         break;
       default:
         twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},"סליחה, המספר איננו מזוהה");
