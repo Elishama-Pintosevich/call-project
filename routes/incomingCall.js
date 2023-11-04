@@ -240,8 +240,8 @@ router.post("/masechet/:id", async(req,res)=>{
         data[0].pages[index]=1
         const data2 = await axios.put(urlEdit,{name:data[0].name, count:data[0].count, pages:data[0].pages, amud:data[0].amud}).then((response) => response);
         console.log(data2);
-        let page = Math.floor(data[0].count / 2 + 2) 
-        let amud = page < (data[0].count / 2 + 2) ? 2 : 1
+        let page = Math.floor(index / 2 + 2) 
+        let amud = page < (index / 2 + 2) ? 2 : 1
         twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},`מעולה, דף ${page},עמוד ${amud},נתפס בהצלחה. תודה`) 
         twiml.hangup()
         break
