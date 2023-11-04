@@ -54,7 +54,7 @@ router.post("/voice", async(req,res)=>{
 
   // gather.play("https://call-project.cyclic.app/Rev.mp3");
   gather.say({language: 'he-IL',voice: 'Google.he-IL-Standard-B'},'שלום, הִגעתם למערכת הקולית של לימוד השַׁס העולמי')
-  gather.say({language: 'he-IL',voice: 'Google.he-IL-Standard-B'},'למיזם חרבות של מעשים טובים הקֶש 1, לתרומה הקֶש 2');
+  gather.say({language: 'he-IL',voice: 'Google.he-IL-Standard-B'},'לפרויקט לימוד השַׁס העולמי הקֶש 1, לתרומות הקֶש 2');
 
   twiml.redirect({
     method: 'POST'
@@ -70,7 +70,7 @@ router.post("/gather", async(req,res)=>{
   if (req.body.Digits) {
     switch (req.body.Digits) {
       case '1':
-        twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'הִגעת למיזם חרבות של מעשים טובים.');
+        twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'הִגעת לפרויקט לימוד השַׁס העולמי, בפרויקט זה העמוד שהנך בוחר, משויך אליך ונדרש ללומדו כל יום מחדש, כך תהיה שותף בכל יום ויום בסיום השַׁס העולמי');
 
           gather = twiml.gather({
           numDigits: 1,
@@ -181,7 +181,7 @@ router.post("/seder/:id", async(req,res)=>{
       action:`https://call-project.cyclic.app/incomingCall/masechet/${idMasechet}`,
       method: 'POST'
     })
-    gather.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'}, `אנא בחר דף באמצעות מספר ואחריו הַקֶש סולמית. לדוגמה לדף בט הַקֶש 2 ואחריו הַקֶש סולמית.`);
+    gather.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'}, ` לבחירת העמוד הראשון הפנוי במסכת זו הקש 1. לבחירת דף אחר, בחר דף באמצעות מספר ואחריו הַקֶש סולמית. לדוגמה לדף יוד הַקֶש 10 ואחריו הַקֶש סולמית`);
 
   }
 
@@ -210,6 +210,8 @@ let data = 0
 router.post("/masechet/:id", async(req,res)=>{
   let id = req.params.id
   let urlGet = `https://good-action.cyclic.app/tractates/single/${id}`
+  let urlEdit = `https://good-action.cyclic.app/tractates/setPages/${id}`
+
   const twiml = new VoiceResponse();
 
   function gether(){
@@ -221,10 +223,37 @@ router.post("/masechet/:id", async(req,res)=>{
     gather.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'}, `אנא בחר עמוד. לעמוד אָלֶף הַקֶש 1, לעמוד בֶט הַקֶש 2.`);
 
   }
+  function redirect(){
+    twiml.redirect({
+      method: 'POST'
+  }, 'https://call-project.cyclic.app/incomingCall/voice');
+  }
   
   data = await axios.get(urlGet).then((response) => response.data);
   digit = req.body.Digits || 0
-  if(digit && digit <= data[0].count/2+1 && digit >= 2){
+  
+  if(digit == 1){
+    twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'אנא הַמְתֶן כמה רגעים')
+    for (let index = 0; index < data[0].pages.length; index++) {
+      const ele = array[index];
+      if(ele == 0){
+        data[0].pages[index]=1
+        const data2 =  axios.put(urlEdit,{name:data[0].name, count:data[0].count, pages:data[0].pages, amud:data[0].amud}).then((response) => response);
+        console.log(data2);
+        let page = Math.floor(data[0].count / 2 + 2) 
+        let amud = page < (data[0].count / 2 + 2) ? 2 : 1
+        twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},`מעולה, דף ${page},עמוד ${amud},נתפס בהצלחה. תודה`) 
+        break
+      }
+      else{
+        twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},`המסכת תפוסה, נסה מסכת אחרת. תודה`)
+        redirect()
+        break
+      }
+    }
+    
+  }
+  else if(digit && digit <= data[0].count/2+1 && digit >= 2){
     twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},` נבחר דף ${req.body.Digits}`)
     gether()
   }
@@ -243,29 +272,37 @@ router.post("/amud/:id", async(req,res)=>{
   const twiml = new VoiceResponse();
   let urlEdit = `https://good-action.cyclic.app/tractates/setPages/${data[0]._id}`
   const id = req.params.id
+
+  function redirect(){
+    twiml.redirect({
+      method: 'POST'
+  }, 'https://call-project.cyclic.app/incomingCall/voice');
+  }
   
   if(req.body.Digits && req.body.Digits<3){
     switch (req.body.Digits){
       case '1':
         if(data[0].pages[(id-2)*2]==1){
           twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},`העמוד תפוס, נסה עמוד או דף אחר. תודה`)
+          redirect()
         }
         else{
           data[0].pages[(id-2)*2]=1
           const data2 = await axios.put(urlEdit,{name:data[0].name, count:data[0].count, pages:data[0].pages, amud:data[0].amud}).then((response) => response);
           console.log(data2);
-          twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},`מעולה, הדף נתפס בהצלחה. תודה`)
+          twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},`מעולה, העמוד נתפס בהצלחה. תודה`)
         }
         break
       case '2':
           if(data[0].pages[(id-2)*2+1]==1){
           twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},`העמוד תפוס, נסה עמוד או דף אחר. תודה`)
+          redirect()
         }
         else{
           data[0].pages[(id-2)*2+1]=1
           const data2 = await axios.put(urlEdit,{name:data[0].name, count:data[0].count, pages:data[0].pages, amud:data[0].amud}).then((response) => response);
           console.log(data2);
-          twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},`מעולה, הדף נתפס בהצלחה. תודה`)
+          twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},`מעולה, העמוד נתפס בהצלחה. תודה`)
         }
         break
     }
