@@ -70,14 +70,14 @@ router.post("/gather", async(req,res)=>{
   if (req.body.Digits) {
     switch (req.body.Digits) {
       case '1':
-        twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'הִגעת לפרויקט לימוד השַׁס העולמי, בפרויקט זה העמוד שהנך בוחר, משויך אליך ונדרש ללומדו כל יום מחדש, כך תהיה שותף בכל יום ויום בסיום השַׁס העולמי');
+        twiml.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'},'הִגעת לפרויקט לימוד השַׁס העולמי, בפרויקט זה העמוד שהִנך בוחר משויך אליך ונדרש ללומדו כל יום מחדש, כך תהיה שותף בכל יום ויום בסיום השַׁס העולמי');
 
           gather = twiml.gather({
           numDigits: 1,
           action:'https://call-project.cyclic.app/incomingCall/tora-magna',
           method: 'POST'
         })
-        gather.say({language: 'he-IL',voice: 'Google.he-IL-Standard-B'},'אנא בחר סדר גמרא. לסדר זרעים הקֶש 1, לסדר מועד הקֶש 2, לסדר נשים הקֶש 3, לסדר נזיקין הקֶש 4, לסדר קָדשים הקֶש 5 ');
+        gather.say({language: 'he-IL',voice: 'Google.he-IL-Standard-B'},'אנא בחר סדר גמרא. לסדר זרעים הקֶש 1, לסדר מועד הקֶש 2, לסדר נשים הקֶש 3, לסדר נזיקין הקֶש 4, לסדר קָדשים הקֶש 5');
 
         break;
       case '2':
@@ -181,7 +181,7 @@ router.post("/seder/:id", async(req,res)=>{
       action:`https://call-project.cyclic.app/incomingCall/masechet/${idMasechet}`,
       method: 'POST'
     })
-    gather.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'}, ` לבחירת העמוד הראשון הפנוי במסכת זו הקש 1. לבחירת דף אחר, בחר דף באמצעות מספר ואחריו הַקֶש סולמית. לדוגמה לדף יוד הַקֶש 10 ואחריו הַקֶש סולמית`);
+    gather.say({language: 'he-IL', voice: 'Google.he-IL-Standard-B'}, ` לבחירת העמוד הראשון הפנוי במסכת זו הקש 1 ואחריו הַקֶש סולמית. לבחירת דף אחר, בחר דף באמצעות מספר ואחריו הַקֶש סולמית. לדוגמה לדף יֻוד הַקֶש 10 ואחריו הַקֶש סולמית`);
 
   }
 
@@ -238,7 +238,7 @@ router.post("/masechet/:id", async(req,res)=>{
       const ele = array[index];
       if(ele == 0){
         data[0].pages[index]=1
-        const data2 =  axios.put(urlEdit,{name:data[0].name, count:data[0].count, pages:data[0].pages, amud:data[0].amud}).then((response) => response);
+        const data2 = await axios.put(urlEdit,{name:data[0].name, count:data[0].count, pages:data[0].pages, amud:data[0].amud}).then((response) => response);
         console.log(data2);
         let page = Math.floor(data[0].count / 2 + 2) 
         let amud = page < (data[0].count / 2 + 2) ? 2 : 1
